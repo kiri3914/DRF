@@ -18,10 +18,20 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from .yasg import urlpatterns as yasg_urls
+# from rest_framework.authtoken.views import obtain_auth_token
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,   # логин → выдаёт access + refresh
+    TokenRefreshView,      # refresh → выдаёт новый access
+)
+
+
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/v1/", include("mainapp.urls")),
+    # path('api/login/', obtain_auth_token)
+    path('api/login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 ]
 
 urlpatterns += yasg_urls

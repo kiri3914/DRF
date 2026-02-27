@@ -2,6 +2,7 @@ from django.db.models import Avg, Count
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
 from .models import Category, Product
 from .serializers import (
@@ -27,6 +28,7 @@ class ProductViewSet(viewsets.ModelViewSet):
     - create/update/partial_update → ProductSerializer (запись)
     """
     queryset = Product.objects.select_related("category")
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
     def get_serializer_class(self):
         if self.action == "list":
